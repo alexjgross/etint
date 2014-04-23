@@ -96,7 +96,7 @@ class Looper(threading.Thread) :
 class Matcher(threading.Thread):
   def __init__(self, lock, q, filepath_matcher, filepath_worker, filepath_player,in_channel=3):
     super(Matcher, self).__init__()
-    self.daemon = True
+    #self.daemon = True
     self.lock = lock
     self.queue = q
     self.filepath_matcher = os.path.abspath(filepath_matcher)
@@ -126,6 +126,7 @@ class Matcher(threading.Thread):
                         input=True,
                         input_device_index=self.in_channel,
                         frames_per_buffer=INPUT_CHUNK)
+    print "got here"
 
     # Open and read filedata
     # Open wave file
@@ -170,12 +171,14 @@ class Matcher(threading.Thread):
       else:
         # Get New Mic Info
         try:
-          micdata = self.audio_input.read(self.LOCAL_CHUNK)
+          mic_buff = self.audio_input.read(INPUT_CHUNK)
           #print str(len(mic_buff))
-          #(micdata, self.state) = audioop.ratecv(mic_buff,BYTES,CHANNELS,44100,8000,self.state)
-          #print "To: "+str(len(micdata))
-          #sys.stdout.write('*')
-          #sys.stdout.flush()
+          (micdata, self.state) = audioop.ratecv(mic_buff,BYTES,CHANNELS,44100,8000,self.state)
+          
+          sys.stdout.write(str(len(mic_buff)))
+	#print "To: "+str(len(micdata))
+          sys.stdout.write(' :To: ' + str(len(micdata))+'\n')
+          sys.stdout.flush()
         except:
           print "***** Ignored oveflow *****" 
           pass

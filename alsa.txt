@@ -1,0 +1,195 @@
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.rear
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.center_lfe
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.side
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.hdmi
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.hdmi
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.modem
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+ALSA lib pcm.c:2217:(snd_pcm_open_noupdate) Unknown PCM cards.pcm.phoneline
+ALSA lib pcm_dmix.c:957:(snd_pcm_dmix_open) The dmix plugin supports only playback stream
+Cannot connect to server socket err = No such file or directory
+Cannot connect to server request channel
+jack server is not running or cannot be started
+
+PortAudio System Info:
+======================
+Version: 1899
+Version Text: PortAudio V19-devel (built Dec  8 2011 02:37:40)
+Number of Host APIs: 2
+Number of Devices  : 9
+
+Host APIs:
+==========
+index: 0
+name: ALSA
+defaultOutputDevice: 6
+type: 8
+deviceCount: 8
+defaultInputDevice: 6
+structVersion: 1
+--------------------------
+index: 1
+name: OSS
+defaultOutputDevice: 8
+type: 7
+deviceCount: 1
+defaultInputDevice: 8
+structVersion: 1
+--------------------------
+
+Devices:
+========
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0116099773243
+	defaultLowInputLatency: 0.0116099773243
+	maxInputChannels: 1
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 0
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 2
+	name: C-Media USB Headphone Set: USB Audio (hw:0,0)
+	defaultHighInputLatency: 0.0464399092971
+	Input rates: [44100.0, 48000.0]
+	Output rates: [44100.0, 48000.0]
+	Full duplex: [44100.0, 48000.0]
+	--------------------------------
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0426530612245
+	defaultLowInputLatency: 0.0426530612245
+	maxInputChannels: 128
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 1
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 128
+	name: sysdefault
+	defaultHighInputLatency: 0.0464399092971
+	Input rates: [8000.0, 9600.0, 11025.0, 16000.0, 22050.0, 32000.0, 44100.0, 48000.0, 88200.0]
+	Output rates: [8000.0, 9600.0, 11025.0, 16000.0, 22050.0, 32000.0, 44100.0, 48000.0, 88200.0]
+	Full duplex: [8000.0, 9600.0, 11025.0, 16000.0, 22050.0, 32000.0, 44100.0, 48000.0, 88200.0]
+	--------------------------------
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0116099773243
+	defaultLowInputLatency: -1.0
+	maxInputChannels: 0
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 2
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 2
+	name: front
+	defaultHighInputLatency: -1.0
+	Output rates: [44100.0, 48000.0]
+	--------------------------------
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0116099773243
+	defaultLowInputLatency: -1.0
+	maxInputChannels: 0
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 3
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 2
+	name: surround40
+	defaultHighInputLatency: -1.0
+	Output rates: [44100.0, 48000.0]
+	--------------------------------
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0116099773243
+	defaultLowInputLatency: -1.0
+	maxInputChannels: 0
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 4
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 2
+	name: iec958
+	defaultHighInputLatency: -1.0
+	Output rates: [44100.0, 48000.0]
+	--------------------------------
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0116099773243
+	defaultLowInputLatency: 0.0116099773243
+	maxInputChannels: 1
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 5
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 2
+	name: spdif
+	defaultHighInputLatency: 0.0464399092971
+	Input rates: [44100.0, 48000.0]
+	Output rates: [44100.0, 48000.0]
+	Full duplex: [44100.0, 48000.0]
+	--------------------------------
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0426530612245
+	defaultLowInputLatency: 0.0426530612245
+	maxInputChannels: 128
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 6
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 128
+	name: default
+	defaultHighInputLatency: 0.0464399092971
+	Input rates: [8000.0, 9600.0, 11025.0, 16000.0, 22050.0, 32000.0, 44100.0, 48000.0, 88200.0]
+	Output rates: [8000.0, 9600.0, 11025.0, 16000.0, 22050.0, 32000.0, 44100.0, 48000.0, 88200.0]
+	Full duplex: [8000.0, 9600.0, 11025.0, 16000.0, 22050.0, 32000.0, 44100.0, 48000.0, 88200.0]
+	--------------------------------
+	defaultSampleRate: 48000.0
+	defaultLowOutputLatency: 0.0426666666667
+	defaultLowInputLatency: -1.0
+	maxInputChannels: 0
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 7
+	defaultHighOutputLatency: 0.0426666666667
+	maxOutputChannels: 2
+	name: dmix
+	defaultHighInputLatency: -1.0
+	Output rates: [48000.0]
+	--------------------------------
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0116099773243
+	defaultLowInputLatency: 0.0116099773243
+	maxInputChannels: 16
+	structVersion: 2
+	hostApi: 1 (OSS)
+	index: 8
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 16
+	name: /dev/dsp
+	defaultHighInputLatency: 0.0464399092971
+	--------------------------------
+
+Default Devices:
+================
+Default Input Device : 6
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0426530612245
+	defaultLowInputLatency: 0.0426530612245
+	maxInputChannels: 128
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 6
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 128
+	name: default
+	defaultHighInputLatency: 0.0464399092971
+	--------------------------------
+Default Output Device: 6
+	defaultSampleRate: 44100.0
+	defaultLowOutputLatency: 0.0426530612245
+	defaultLowInputLatency: 0.0426530612245
+	maxInputChannels: 128
+	structVersion: 2
+	hostApi: 0 (ALSA)
+	index: 6
+	defaultHighOutputLatency: 0.0464399092971
+	maxOutputChannels: 128
+	name: default
+	defaultHighInputLatency: 0.0464399092971
+	--------------------------------

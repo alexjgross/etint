@@ -23,8 +23,8 @@ def main():
 	lock = threading.Lock()
 	queue = Queue.Queue()
 
-	#myLooper = audiotools.Looper(lock,queue,PLAYER_FILENAME,WORKER_FILENAME)
-	#myLooper.play()
+	myLooper = audiotools.Looper(lock,queue,PLAYER_FILENAME,WORKER_FILENAME)
+	myLooper.play()
 
 	print len(sys.argv)
 	print sys.argv[1]
