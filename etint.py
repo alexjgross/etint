@@ -23,17 +23,20 @@ def main():
 	lock = threading.Lock()
 	queue = Queue.Queue()
 
-	myLooper = audiotools.Looper(lock,queue,PLAYER_FILENAME,WORKER_FILENAME)
-	myLooper.play()
-
 	print len(sys.argv)
 	print sys.argv[1]
 		
-	if len(sys.argv) == 2:
-		channel = int(sys.argv[1])
+	if len(sys.argv) == 3:
+		channel_o = int(sys.argv[1])
+		channel_i = int(sys.argv[2])
 	else:
-		channel = 0
-	myMatcher = audiotools.Matcher(lock,queue,MATCHER_FILENAME,WORKER_FILENAME,PLAYER_FILENAME,channel)
+		channel_o = 1
+		channel_i = 0
+
+	myLooper = audiotools.Looper(lock,queue,PLAYER_FILENAME,WORKER_FILENAME,channel_o)
+	myLooper.play()
+
+	myMatcher = audiotools.Matcher(lock,queue,MATCHER_FILENAME,WORKER_FILENAME,PLAYER_FILENAME,channel_i)
 	myMatcher.play()
 	
 	

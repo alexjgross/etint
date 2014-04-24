@@ -7,8 +7,8 @@ import pyaudio
 import audioop
 import time
 
-LOOPER_CHUNK = 8000
-INPUT_CHUNK = 1024
+LOOPER_CHUNK = 16000
+INPUT_CHUNK = 44100
 FORMAT = pyaudio.paInt16
 BYTES = 2
 CHANNELS = 1
@@ -23,7 +23,7 @@ class Looper(threading.Thread) :
   continues to do its stuff. :)
   """
 
-  def __init__(self, lock, q, filepath_player, filepath_worker, CHUNK=LOOPER_CHUNK) :
+  def __init__(self, lock, q, filepath_player, filepath_worker, out_channel=1,CHUNK=LOOPER_CHUNK) :
     """
     Initialize `Looper` class.
 
@@ -42,13 +42,14 @@ class Looper(threading.Thread) :
     self.filepath_worker = os.path.abspath(filepath_worker)
     self.loop = True
     self.CHUNK = LOOPER_CHUNK
+    self.out_channel = out_channel
 
     self.audio_interface = pyaudio.PyAudio()
     self.audio_output = self.audio_interface.open(
       format = FORMAT,
       channels = CHANNELS,
       rate = RATE,
-      output_device_index = 1,
+      output_device_index = self.out_channel,
       output = True)
     self.player_wav = wave.open(self.filepath_player, 'rb')
 
@@ -94,7 +95,7 @@ class Looper(threading.Thread) :
     self.audio_interface.terminate()
 
 class Matcher(threading.Thread):
-  def __init__(self, lock, q, filepath_matcher, filepath_worker, filepath_player,in_channel=3):
+  def __init__(self, lock, q, filepath_matcher, filepath_worker, filepath_player,in_channel=0):
     super(Matcher, self).__init__()
     #self.daemon = True
     self.lock = lock
@@ -113,7 +114,7 @@ class Matcher(threading.Thread):
     self.state = None
 
     self.audio_interface = pyaudio.PyAudio()
-
+    
     #List Audio Devices
     for i in range(0, self.audio_interface.get_device_count()):
       print str(i) + " " + self.audio_interface.get_device_info_by_index(i)["name"]
@@ -122,7 +123,7 @@ class Matcher(threading.Thread):
     self.audio_input = self.audio_interface.open(
                         format=FORMAT,
                         channels=CHANNELS,
-                        rate=RATE,
+                        rate=44100,
                         input=True,
                         input_device_index=self.in_channel,
                         frames_per_buffer=INPUT_CHUNK)
@@ -171,13 +172,17 @@ class Matcher(threading.Thread):
       else:
         # Get New Mic Info
         try:
-          mic_buff = self.audio_input.read(INPUT_CHUNK)
+          mic_buff = self.audio_input.read(INPUT_CHUNK/2)
           #print str(len(mic_buff))
-          (micdata, self.state) = audioop.ratecv(mic_buff,BYTES,CHANNELS,44100,8000,self.state)
+          (mic_sec, self.state) = audioop.ratecv(mic_buff,BYTES,CHANNELS,44100,8000,self.state)
           
           sys.stdout.write(str(len(mic_buff)))
-	#print "To: "+str(len(micdata))
-          sys.stdout.write(' :To: ' + str(len(micdata))+'\n')
+	  #print "To: "+str(len(micdata))
+          sys.stdout.write(' :To: ' + str(len(mic_sec))+'\n')
+          
+          #for x in xrange(0,len(mic_sec),800):
+ 	  micdata = mic_sec[0:800]
+	  sys.stdout.write(' :To: ' + str(len(micdata))+'\n')
           sys.stdout.flush()
         except:
           print "***** Ignored oveflow *****" 
