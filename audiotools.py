@@ -7,7 +7,7 @@ import pyaudio
 import audioop
 import time
 
-LOOPER_CHUNK = 2048
+LOOPER_CHUNK = 8000
 INPUT_CHUNK = 256
 FORMAT = pyaudio.paInt16
 BYTES = 2
