@@ -2,6 +2,7 @@ import audiotools
 import threading
 import Queue
 import os
+import sys
 
 #FORMAT = pyaudio.paInt16
 #CHANNELS = 1
@@ -17,18 +18,30 @@ MATCHER_FILENAME = HOME_DIR+"/audio/hschantShort.wav"
 #WORKER_FILENAME  = HOME_DIR+"/audio/workerD.wav"
 #MATCHER_FILENAME = HOME_DIR+"/audio/matcherD.wav"
 
-def main():
+def main():	
+
 	lock = threading.Lock()
 	queue = Queue.Queue()
+
 	try:
 		myLooper = audiotools.Looper(lock,queue,PLAYER_FILENAME,WORKER_FILENAME)
 		myLooper.play()
 
-		myMatcher = audiotools.Matcher(lock,queue,MATCHER_FILENAME,WORKER_FILENAME,1)
+		myMatcher = audiotools.Matcher(lock,queue,MATCHER_FILENAME,WORKER_FILENAME,PLAYER_FILENAME,0)
 		myMatcher.play()
 	except:
-		print "Something happened, check you are using the correct input."
-		pass
+		print "Possible input error"
+	
+		
 
 if __name__ == '__main__':
-    main()
+	main()
+
+#except (KeyboardInterrupt, SystemExit):
+#	print "interuppted"
+#	myMatcher.stop()
+#	myLooper.stop()
+#	sys.exit("Exited Program")
+#	quit()
+
+

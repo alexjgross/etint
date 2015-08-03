@@ -8,7 +8,7 @@ import audioop
 import time
 
 LOOPER_CHUNK = 8000
-INPUT_CHUNK = 256
+INPUT_CHUNK = 1024
 FORMAT = pyaudio.paInt16
 BYTES = 2
 CHANNELS = 1
@@ -35,6 +35,7 @@ class Looper(threading.Thread) :
                                False otherwise.
     """
     super(Looper, self).__init__()
+    #self.daemon = True
     self.lock = lock
     self.queue = q
     self.filepath_player = os.path.abspath(filepath_player)
@@ -54,21 +55,24 @@ class Looper(threading.Thread) :
     # PLAYBACK LOOP
     data = self.player_wav.readframes(self.CHUNK)
     while self.loop :
+
       self.audio_output.write(data)
       data = self.player_wav.readframes(self.CHUNK)
-      
+
       #sys.stdout.write('.')
       #sys.stdout.flush()
       # Get new player data
       if data == '' : # If file is over then rewind.
         #sys.stdout.write('\n')
+        self.player_wav.close()
         self.queue.put("writedata")
         self.queue.join()
 
         self.lock.acquire()
-        shutil.copyfile(self.filepath_worker,self.filepath_player)
-        self.lock.release()
+        #shutil.copyfile(self.filepath_worker,self.filepath_player)
         self.player_wav = wave.open(self.filepath_player,'rb')
+        self.lock.release()
+
         data = self.player_wav.readframes(self.CHUNK)
 
   def play(self) :
@@ -81,17 +85,22 @@ class Looper(threading.Thread) :
     """
     Stop playback. 
     """
+    print "Stopping Playback"
     self.loop = False
+    self.player_wav.close()
+    self.audio_output.stop_stream()
     self.audio_output.close()
     self.audio_interface.terminate()
 
 class Matcher(threading.Thread):
-  def __init__(self, lock, q, filepath_matcher, filepath_worker,in_channel=0):
+  def __init__(self, lock, q, filepath_matcher, filepath_worker, filepath_player,in_channel=0):
     super(Matcher, self).__init__()
+    self.daemon = True
     self.lock = lock
     self.queue = q
     self.filepath_matcher = os.path.abspath(filepath_matcher)
     self.filepath_worker = os.path.abspath(filepath_worker)
+    self.filepath_player = os.path.abspath(filepath_player)
     self.in_channel = in_channel
     #More arguments here if needed
     self.SEGMENT = 5  #5 seconds
@@ -99,12 +108,14 @@ class Matcher(threading.Thread):
     self.TIMING = 0
     self.WAV_LENGTH = 0
     self.BYTES = 2
+    self.LOCAL_CHUNK = INPUT_CHUNK/4
 
     self.audio_interface = pyaudio.PyAudio()
 
     #List Audio Devices
     for i in range(0, self.audio_interface.get_device_count()):
-      print str(i) + " " + self.audio_interface.get_device_info_by_index(i)["name"]
+      #print str(i) + " " + self.audio_interface.get_device_info_by_index(i)["name"]
+      pass
 
     self.audio_input = self.audio_interface.open(
                         format=FORMAT,
@@ -132,17 +143,19 @@ class Matcher(threading.Thread):
     # print "worklen "+str(len(self.workdata))
 
   def run(self):
+    #print "Started input"
     while True:
+      #print "loop"
       if not self.queue.empty():
         message = self.queue.get()
         if message == "writedata":
           print "Writing Data"
           print "Acquire Lock"
           self.lock.acquire()
-          wfo = wave.open(self.filepath_worker, 'wb')
+          wfo = wave.open(self.filepath_player, 'wb')
           wfo.setparams(self.params)
 
-          print "Writing "+str(len(self.workdata))+" BYTE"
+          print "Writing "+str(len(self.workdata))+" BYTES"
           wfo.writeframes(self.workdata)
           wfo.writeframes('')
 
@@ -155,7 +168,7 @@ class Matcher(threading.Thread):
       else:
         # Get New Mic Info
         try:
-          micdata = self.audio_input.read(INPUT_CHUNK)
+          micdata = self.audio_input.read(self.LOCAL_CHUNK)
           #sys.stdout.write('*')
           #sys.stdout.flush()
         except:
@@ -181,24 +194,25 @@ class Matcher(threading.Thread):
 
         if factorM > 0:
           if abs(1-factorM) < abs(1-factorW):
-            print "Matched @ " + str((in_pos+seg_in_pos)) + ", with factor:" + str(factorM)
+            #print "Matched @ " + str((in_pos+seg_in_pos)) + ", with factor:" + str(factorM)
 
-            micpart = audioop.mul(micdata,2,(factorM*0.9))
-            workpart = audioop.mul(seg_workdata[seg_in_pos:seg_out_pos],2,0.1)
-          else:
+            #micpart = audioop.mul(micdata,2,(factorM*0.9))
+            #workpart = audioop.mul(seg_workdata[seg_in_pos:seg_out_pos],2,0.1)
+          #else:
             #print "WeakMat @ " + str((in_pos+seg_in_pos)) + ", with factor:" + str(factorM)
 
-            micpart = audioop.mul(micdata,2,(factorM*0.1))
-            workpart = audioop.mul(seg_workdata[seg_in_pos:seg_out_pos],2,0.9)
+            #micpart = audioop.mul(micdata,2,(factorM*0.1))
+            #workpart = audioop.mul(seg_workdata[seg_in_pos:seg_out_pos],2,0.9)
 
-          msg = []
-          msg.append(self.workdata[0:in_pos])
-          msg.append(seg_workdata[0:seg_in_pos])
-          msg.append(audioop.add(micpart,workpart,BYTES))
-          msg.append(seg_workdata[seg_out_pos:len(seg_workdata)])
-          msg.append(self.workdata[out_pos:self.WAV_LENGTH])
+            msg = []
+            msg.append(self.workdata[0:in_pos])
+            msg.append(seg_workdata[0:seg_in_pos])
+            msg.append(micdata)
+            #msg.append(audioop.add(micpart,workpart,BYTES))
+            msg.append(seg_workdata[seg_out_pos:len(seg_workdata)])
+            msg.append(self.workdata[out_pos:self.WAV_LENGTH])
 
-          self.workdata = b''.join(msg)
+            self.workdata = b''.join(msg)
           #print "new work len "+str(len(self.workdata))
 
         #Increment Chunk
@@ -213,6 +227,17 @@ class Matcher(threading.Thread):
 
   def play(self):
     self.start()
+
+  def stop(self) :
+    """
+    Stop playback. 
+    """
+    print "Stopping Input"
+    self.audio_input.stop_stream()
+    self.audio_input.close()
+    self.audio_interface.terminate()
+
+
 
 
 
