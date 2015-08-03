@@ -114,7 +114,7 @@ class Matcher(threading.Thread):
 
     #List Audio Devices
     for i in range(0, self.audio_interface.get_device_count()):
-      #print str(i) + " " + self.audio_interface.get_device_info_by_index(i)["name"]
+      print str(i) + " " + self.audio_interface.get_device_info_by_index(i)["name"]
       pass
 
     self.audio_input = self.audio_interface.open(
@@ -194,7 +194,7 @@ class Matcher(threading.Thread):
 
         if factorM > 0:
           if abs(1-factorM) < abs(1-factorW):
-            #print "Matched @ " + str((in_pos+seg_in_pos)) + ", with factor:" + str(factorM)
+            print "Matched @ " + str((in_pos+seg_in_pos)) + ", with factor:" + str(factorM)
 
             #micpart = audioop.mul(micdata,2,(factorM*0.9))
             #workpart = audioop.mul(seg_workdata[seg_in_pos:seg_out_pos],2,0.1)
