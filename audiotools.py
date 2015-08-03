@@ -108,7 +108,7 @@ class Matcher(threading.Thread):
     self.TIMING = 0
     self.WAV_LENGTH = 0
     self.BYTES = 2
-    self.LOCAL_CHUNK = INPUT_CHUNK/4
+    self.LOCAL_CHUNK = 256
 
     self.audio_interface = pyaudio.PyAudio()
 
