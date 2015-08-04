@@ -117,6 +117,7 @@ class Matcher(threading.Thread):
     for i in range(0, self.audio_interface.get_device_count()):
       print str(i) + " " + self.audio_interface.get_device_info_by_index(i)["name"]
       pass
+    print "Atempting to connect to: "+self.audio_interface.get_device_info_by_index(self.in_channel)["name"]
 
     self.audio_input = self.audio_interface.open(
                         format=FORMAT,

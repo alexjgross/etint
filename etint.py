@@ -27,7 +27,14 @@ def main():
 		myLooper = audiotools.Looper(lock,queue,PLAYER_FILENAME,WORKER_FILENAME)
 		myLooper.play()
 
-		myMatcher = audiotools.Matcher(lock,queue,MATCHER_FILENAME,WORKER_FILENAME,PLAYER_FILENAME,0)
+		print len(sys.argv)
+		print sys.argv[1]
+		
+		if len(sys.argv) == 2:
+			channel = int(sys.argv[1])
+		else:
+			channel = 0
+		myMatcher = audiotools.Matcher(lock,queue,MATCHER_FILENAME,WORKER_FILENAME,PLAYER_FILENAME,channel)
 		myMatcher.play()
 	except:
 		print "Possible input error"
