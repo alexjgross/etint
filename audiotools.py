@@ -48,6 +48,7 @@ class Looper(threading.Thread) :
       format = FORMAT,
       channels = CHANNELS,
       rate = RATE,
+      output_device_index = 1,
       output = True)
     self.player_wav = wave.open(self.filepath_player, 'rb')
 
@@ -116,7 +117,6 @@ class Matcher(threading.Thread):
     #List Audio Devices
     for i in range(0, self.audio_interface.get_device_count()):
       print str(i) + " " + self.audio_interface.get_device_info_by_index(i)["name"]
-      pass
     print "Atempting to connect to: "+self.audio_interface.get_device_info_by_index(self.in_channel)["name"]
 
     self.audio_input = self.audio_interface.open(
