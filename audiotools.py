@@ -93,7 +93,7 @@ class Looper(threading.Thread) :
     self.audio_interface.terminate()
 
 class Matcher(threading.Thread):
-  def __init__(self, lock, q, filepath_matcher, filepath_worker, filepath_player,in_channel=0):
+  def __init__(self, lock, q, filepath_matcher, filepath_worker, filepath_player,in_channel=3):
     super(Matcher, self).__init__()
     self.daemon = True
     self.lock = lock
@@ -109,6 +109,7 @@ class Matcher(threading.Thread):
     self.WAV_LENGTH = 0
     self.BYTES = 2
     self.LOCAL_CHUNK = 256
+    self.state = None
 
     self.audio_interface = pyaudio.PyAudio()
 
@@ -120,7 +121,7 @@ class Matcher(threading.Thread):
     self.audio_input = self.audio_interface.open(
                         format=FORMAT,
                         channels=CHANNELS,
-                        rate=RATE,
+                        rate=44100,
                         input=True,
                         input_device_index=self.in_channel,
                         frames_per_buffer=INPUT_CHUNK)
@@ -168,7 +169,10 @@ class Matcher(threading.Thread):
       else:
         # Get New Mic Info
         try:
-          micdata = self.audio_input.read(self.LOCAL_CHUNK)
+          mic_buff = self.audio_input.read(INPUT_CHUNK)
+          #print str(len(mic_buff))
+          (micdata, self.state) = audioop.ratecv(mic_buff,BYTES,CHANNELS,44100,8000,self.state)
+          #print "To: "+str(len(micdata))
           #sys.stdout.write('*')
           #sys.stdout.flush()
         except:
