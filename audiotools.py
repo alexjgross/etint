@@ -121,7 +121,7 @@ class Matcher(threading.Thread):
     self.audio_input = self.audio_interface.open(
                         format=FORMAT,
                         channels=CHANNELS,
-                        rate=44100,
+                        rate=RATE,
                         input=True,
                         input_device_index=self.in_channel,
                         frames_per_buffer=INPUT_CHUNK)
@@ -169,9 +169,9 @@ class Matcher(threading.Thread):
       else:
         # Get New Mic Info
         try:
-          mic_buff = self.audio_input.read(INPUT_CHUNK)
+          micdata = self.audio_input.read(self.LOCAL_CHUNK)
           #print str(len(mic_buff))
-          (micdata, self.state) = audioop.ratecv(mic_buff,BYTES,CHANNELS,44100,8000,self.state)
+          #(micdata, self.state) = audioop.ratecv(mic_buff,BYTES,CHANNELS,44100,8000,self.state)
           #print "To: "+str(len(micdata))
           #sys.stdout.write('*')
           #sys.stdout.flush()
