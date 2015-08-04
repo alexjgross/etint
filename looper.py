@@ -14,6 +14,12 @@ BYTES = 2
 CHANNELS = 1
 RATE = 8000
 
+HOME_DIR = os.path.dirname(os.path.realpath(__file__))
+
+PLAYER_FILENAME  = HOME_DIR+"/audio/hschantShortPinkP.wav"
+WORKER_FILENAME  = HOME_DIR+"/audio/hschantShortPinkW.wav"
+MATCHER_FILENAME = HOME_DIR+"/audio/hschantShort.wav"
+
 
 class Looper(threading.Thread) :
 
@@ -26,10 +32,9 @@ class Looper(threading.Thread) :
 
     self.audio_interface = pyaudio.PyAudio()
     self.audio_output = self.audio_interface.open(
-      format = FORMAT,
-      channels = CHANNELS,
-      rate = RATE,
-      output_device_index = 1,
+      format = pyaudio.paInt16,
+      channels = 1,
+      rate = 8000,
       output = True)
     self.player_wav = wave.open(self.filepath_player, 'rb')
 
@@ -47,7 +52,7 @@ class Looper(threading.Thread) :
       if data == '' : # If file is over then rewind.
         #sys.stdout.write('\n')
         self.player_wav.close()
-      
+        print "Rewind"
         self.player_wav = wave.open(self.filepath_player,'rb')
 
         data = self.player_wav.readframes(self.CHUNK)
@@ -68,3 +73,8 @@ class Looper(threading.Thread) :
     self.audio_output.stop_stream()
     self.audio_output.close()
     self.audio_interface.terminate()
+
+myLooper = Looper(PLAYER_FILENAME,WORKER_FILENAME)
+myLooper.play()
+
+
